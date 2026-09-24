@@ -1,0 +1,52 @@
+{
+  "name": "ayna-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "db:local": "tsx scripts/dev-db.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "hash-password": "tsx scripts/hash-password.ts",
+    "import": "tsx scripts/import-crm.ts"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "@vercel/blob": "^2.8.0",
+    "bcryptjs": "^3.0.3",
+    "csv-parse": "^7.0.2",
+    "dotenv": "^17.4.2",
+    "lucide-react": "^1.46.0",
+    "next": "16.3.5",
+    "next-auth": "5.0.0-beta.32",
+    "next-intl": "^4.14.5",
+    "pg": "^8.23.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.88.0",
+    "sharp": "^0.35.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.13.4",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "embedded-postgres": "18.4.0-beta.17",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.5",
+    "prisma": "7.10.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,170 @@
+// Схема из SPEC.md, раздел 4, реализована «как есть».
+// Отличия от текста ТЗ продиктованы Prisma 7 (см. DECISIONS.md):
+//   - generator `prisma-client` вместо устаревшего `prisma-client-js`, обязателен `output`;
+//   - строка подключения задаётся в prisma.config.ts, а не в datasource.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DealType {
+  RENT
+  SALE
+  BOTH
+}
+enum PropKind {
+  RETAIL
+  OFFICE
+  WAREHOUSE
+  LAND
+  BUILDING
+}
+enum PropStatus {
+  ACTIVE
+  RESERVED
+  CLOSED
+  HIDDEN
+}
+enum LeadType {
+  OBJECT
+  SEARCH
+  OWNER
+  CONTACT
+  PRESENTATION
+}
+enum LeadStatus {
+  NEW
+  IN_WORK
+  QUALIFIED
+  REJECTED
+  DEAL
+}
+
+model Property {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  externalId    String?     @unique          // id из CRM «РБД» — ключ идемпотентного импорта
+  title         String
+  kind          PropKind
+  dealType      DealType
+  status        PropStatus  @default(ACTIVE)
+
+  district      String                        // район Алматы
+  address       String?                       // НЕ показывать публично, если isExclusive
+  landmark      String?                       // «рядом с ТРЦ ...» — публичный ориентир
+  lat           Float?
+  lng           Float?
+
+  areaM2        Float
+  ceilingM      Float?
+  floor         String?                       // "1", "цоколь", "2-3"
+  entrance      String?                       // "отдельный вход с улицы"
+  powerKw       Float?
+  hasWetPoint   Boolean     @default(false)
+
+  priceSale     Decimal?    @db.Decimal(14,2) // ₸, полная стоимость
+  priceRentM2   Decimal?    @db.Decimal(10,2) // ₸ за м² в месяц
+  priceRentTotal Decimal?   @db.Decimal(14,2) // ₸ в месяц итого
+  currency      String      @default("KZT")
+  utilitiesIncluded Boolean @default(false)
+
+  isExclusive   Boolean     @default(false)   // закрытый объект: детали только по заявке
+  isHot         Boolean     @default(false)   // «горящий вариант»
+  isFeatured    Boolean     @default(false)   // на главную
+
+  descriptionMd String      @db.Text
+  advantages    String[]                      // 3-5 буллетов
+  presentationUrl String?                     // PDF, выдаётся после заявки
+
+  images        PropertyImage[]
+  leads         Lead[]
+
+  publishedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([kind, dealType, status])
+  @@index([district])
+  @@index([isHot, isFeatured])
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  alt        String
+  width      Int
+  height     Int
+  order      Int      @default(0)
+  @@index([propertyId, order])
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String                    // «Коммерция в ЖК Терракота»
+  kind        PropKind
+  dealType    DealType
+  district    String?
+  areaM2      Float?
+  amountLabel String?                   // «500 млн ₸» — строка, не число: иногда «сумма не раскрывается»
+  durationLabel String?                 // «1,5 месяца»
+  task        String   @db.Text
+  solution    String   @db.Text
+  result      String   @db.Text
+  coverUrl    String?
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  type       LeadType
+  status     LeadStatus @default(NEW)
+  name       String
+  phone      String
+  comment    String?    @db.Text
+
+  propertyId String?
+  property   Property?  @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+
+  // поля брифа на подбор
+  briefKind      PropKind?
+  briefAreaFrom  Float?
+  briefAreaTo    Float?
+  briefBudget    String?
+  briefDistricts String[]
+  briefBusiness  String?
+
+  // атрибуция
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  pagePath    String?
+  referrer    String?
+
+  createdAt  DateTime @default(now())
+  @@index([status, createdAt])
+}
+
+model Testimonial {
+  id       String  @id @default(cuid())
+  author   String
+  role     String?                       // «собственник помещения на Абая»
+  text     String  @db.Text
+  order    Int     @default(0)
+  isPublic Boolean @default(true)
+}
+
+model Setting {
+  key   String @id
+  value Json
+}
