@@ -50,3 +50,6 @@ next-env.d.ts
 # local uploads fallback (development without Vercel Blob)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# preview snapshot for GitHub Pages
+/out-preview/

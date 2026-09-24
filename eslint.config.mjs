@@ -12,10 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Сгенерированный Prisma-клиент, локальная БД и временные скрипты
+    // Сгенерированный Prisma-клиент, локальная БД, снимок превью и временные скрипты
     "lib/generated/**",
     ".pgdata/**",
     ".tmp/**",
+    "out-preview/**",
   ]),
 ]);
 
