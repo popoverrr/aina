@@ -2,15 +2,19 @@ import { useTranslations } from "next-intl";
 import { Section } from "@/components/ui/Section";
 import { FillInText } from "@/components/ui/Placeholder";
 
-/** Блок специализации: схематичная карта района инлайн-SVG (не картинка, не Google Maps) + текст. */
-export function GoldenSquare({ text }: { text?: string }) {
-  const t = useTranslations("home.golden");
+/**
+ * Блок специализации «Лучшие локации»: схематичная карта района инлайн-SVG
+ * (не картинка, не Google Maps) + текст. Золотой квадрат — основная специализация,
+ * он назван первым абзацем и выделен на схеме.
+ */
+export function BestLocations({ text }: { text?: string }) {
+  const t = useTranslations("home.locations");
 
   return (
-    <Section tone="muted" aria-labelledby="golden-title">
+    <Section tone="muted" aria-labelledby="locations-title">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <h2 id="golden-title">{t("title")}</h2>
+          <h2 id="locations-title">{t("title")}</h2>
           <p className="mt-4 text-lg">{t("lead")}</p>
           <div className="mt-4 text-ink-muted">
             <FillInText value={text ?? t("text")} />
@@ -39,7 +43,7 @@ export function GoldenSquare({ text }: { text?: string }) {
             {/* золотой квадрат */}
             <rect x="120" y="60" width="240" height="250" fill="var(--color-accent)" fillOpacity="0.14" stroke="var(--color-accent)" strokeWidth="3" rx="4" />
             <text x="240" y="190" textAnchor="middle" fontSize="18" fontWeight="600" fill="var(--color-accent-ink)">
-              {t("title")}
+              {t("mapLabel")}
             </text>
             {/* подписи */}
             <text x="240" y="332" textAnchor="middle" fontSize="12" fill="var(--color-ink-muted)">

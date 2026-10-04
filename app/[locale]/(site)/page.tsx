@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { CaseCard } from "@/components/cases/CaseCard";
 import { LeadFormDeferred } from "@/components/forms/LeadFormStatic";
-import { GoldenSquare } from "@/components/home/GoldenSquare";
+import { BestLocations } from "@/components/home/BestLocations";
 import { Hero } from "@/components/home/Hero";
 import { HowIWork } from "@/components/home/HowIWork";
 import { Stats } from "@/components/home/Stats";
@@ -92,7 +92,9 @@ export default async function HomePage() {
         </Section>
       ) : null}
 
-      <GoldenSquare text={settings.golden.text} />
+      {/* Ключ настройки остался `golden`: это имя поля в базе, переименование потеряло бы
+          уже сохранённый заказчиком текст. На сайте и в админке блок называется «Лучшие локации». */}
+      <BestLocations text={settings.golden.text} />
       <HowIWork />
       <WhoIHelp />
       <Testimonials items={testimonials} title={t("testimonials.title")} />
