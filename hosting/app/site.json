@@ -24,6 +24,10 @@
    "ru"
   ]
  },
+ "madeBy": {
+  "label": "Cyber Move Consulting",
+  "url": "https://cybermove.asia"
+ },
  "districts": [
   {
    "slug": "alatau",

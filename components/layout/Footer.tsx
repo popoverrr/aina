@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { formatPhoneDisplay } from "@/lib/format";
@@ -90,6 +91,25 @@ export async function Footer({ contacts }: { contacts: Contacts }) {
       </div>
       <div className="border-t border-line">
         <div className="container-site py-4 text-xs text-ink-muted">{t("footer.rights", { year, name: site.agent.fullName })}</div>
+      </div>
+      {/* Подпись разработчика: имя компании, поэтому не переводится и не лежит в словаре. */}
+      <div className="border-t border-line">
+        {/* pb-20 — чтобы плавающая кнопка WhatsApp не перекрывала кнопку в углу */}
+        <div className="container-site flex justify-center py-4 pb-24 sm:justify-end">
+          <a
+            href={site.madeBy.url}
+            target="_blank"
+            rel="noopener"
+            className="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-accent px-[18px] py-2.5 text-sm transition-colors duration-150 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <span className="text-ink-muted transition-colors duration-150 group-hover:text-white">Created by</span>
+            <span className="font-semibold text-accent-ink transition-colors duration-150 group-hover:text-white">{site.madeBy.label}</span>
+            <ArrowUpRight
+              className="size-4 text-accent-ink transition-[color,transform] duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white"
+              aria-hidden="true"
+            />
+          </a>
+        </div>
       </div>
     </footer>
   );

@@ -69,6 +69,7 @@ async function exportSiteConfig(): Promise<void> {
     agent: site.agent,
     legal: site.legal,
     site: site.site,
+    madeBy: site.madeBy,
     districts: DISTRICTS,
   };
   await writeFile(path.join(HOSTING, "app", "site.json"), JSON.stringify(data, null, 1), "utf8");

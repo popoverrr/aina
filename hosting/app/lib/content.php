@@ -75,6 +75,12 @@ function locations_text(): string
     return filled($s['text'] ?? null) ? (string) $s['text'] : t('home.locations.text');
 }
 
+/** Подпись разработчика в подвале: имя компании и ссылка из site.config.ts. */
+function made_by(string $key): string
+{
+    return (string) (site_data()['madeBy'][$key] ?? '');
+}
+
 function whatsapp_url(string $text = ''): string
 {
     return whatsapp_link(contacts()['whatsapp'], $text);

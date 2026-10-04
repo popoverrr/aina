@@ -205,6 +205,17 @@ function site_footer(array $c): void
 <div class="border-t border-line">
   <div class="container-site py-4 text-xs text-ink-muted"><?= e(t('common.footer.rights', ['year' => date('Y'), 'name' => (string) agent('fullName')])) ?></div>
 </div>
+<?php /* Подпись разработчика: имя компании, поэтому не переводится и не лежит в словаре. */ ?>
+<div class="border-t border-line">
+  <div class="container-site flex justify-center py-4 pb-24 sm:justify-end">
+    <a href="<?= e(made_by('url')) ?>" target="_blank" rel="noopener"
+       class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-accent px-[18px] py-2.5 text-sm transition-colors duration-150 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+      <span class="text-ink-muted transition-colors duration-150 group-hover:text-white">Created by</span>
+      <span class="font-semibold text-accent-ink transition-colors duration-150 group-hover:text-white"><?= e(made_by('label')) ?></span>
+      <?= icon('arrow-up-right', 'size-4 text-accent-ink transition-[color,transform] duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white') ?>
+    </a>
+  </div>
+</div>
 </footer>
 <?php
 }

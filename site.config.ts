@@ -49,6 +49,11 @@ export const site = {
     defaultLocale: "ru",
     locales: ["ru"], // "kk" добавится на этапе 2 — см. i18n/routing.ts и messages/kk.json
   },
+  /** Подпись разработчика в подвале. Имя компании не переводится. */
+  madeBy: {
+    label: "Cyber Move Consulting",
+    url: "https://cybermove.asia",
+  },
   legal: {
     /** Реквизиты ИП/ТОО не показываем — блок не рендерится. */
     entity: undefined as string | undefined,
