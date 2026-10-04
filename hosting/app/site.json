@@ -1,0 +1,61 @@
+{
+ "agent": {
+  "fullName": "Айна",
+  "shortName": "Айна",
+  "role": "Коммерческая недвижимость",
+  "tagline": "Помогаю заехать и зарабатывать",
+  "city": "Алматы",
+  "yearsInMarket": 10,
+  "closedVolume": "более 3 млрд ₸",
+  "objectsInBase": "60+",
+  "avgDealDuration": "2 недели",
+  "phone": "+7 701 085 77 17",
+  "whatsapp": "77010857717",
+  "telegram": "https://t.me/+77010857717",
+  "instagram": "ainona.17"
+ },
+ "legal": {
+  "operator": "Айна, частное лицо, г. Алматы"
+ },
+ "site": {
+  "domain": "ainaestate.asia",
+  "defaultLocale": "ru",
+  "locales": [
+   "ru"
+  ]
+ },
+ "districts": [
+  {
+   "slug": "alatau",
+   "name": "Алатауский"
+  },
+  {
+   "slug": "almaly",
+   "name": "Алмалинский"
+  },
+  {
+   "slug": "auezov",
+   "name": "Ауэзовский"
+  },
+  {
+   "slug": "bostandyk",
+   "name": "Бостандыкский"
+  },
+  {
+   "slug": "zhetysu",
+   "name": "Жетысуский"
+  },
+  {
+   "slug": "medeu",
+   "name": "Медеуский"
+  },
+  {
+   "slug": "nauryzbay",
+   "name": "Наурызбайский"
+  },
+  {
+   "slug": "turksib",
+   "name": "Турксибский"
+  }
+ ]
+}

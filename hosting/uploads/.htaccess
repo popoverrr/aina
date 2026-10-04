@@ -1,0 +1,5 @@
+# Внутри — только изображения, ничего исполняемого
+<FilesMatch "\.(php|phtml|phar|cgi|pl|py|sh|html|htm)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

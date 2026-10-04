@@ -60,3 +60,13 @@ deploy/*
 
 # production static build (uploaded by scripts/deploy-ftp.mjs)
 /dist/
+
+# временные файлы сборки
+/.tmp/
+
+# локальные данные PHP-версии (база, сессии, загруженные фото)
+/hosting/app/data/
+/hosting/app/config.php
+/hosting/assets/site.css
+/hosting/uploads/*
+!/hosting/uploads/.htaccess

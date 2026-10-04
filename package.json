@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "build:static": "tsx scripts/build-static.ts --production",
+    "build:php": "tsx scripts/build-php.ts",
     "preview:build": "tsx scripts/build-static.ts",
-    "deploy": "npm run build:static && node scripts/deploy-ftp.mjs",
+    "deploy": "npm run build:php && node scripts/deploy-ftp.mjs",
     "deploy:dry": "node scripts/deploy-ftp.mjs --dry-run",
     "typecheck": "tsc --noEmit",
     "db:local": "tsx scripts/dev-db.ts",
@@ -40,6 +41,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.13.4",
     "@types/pg": "^8.15.0",
