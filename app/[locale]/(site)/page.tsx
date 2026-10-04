@@ -13,10 +13,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { getFeaturedCases } from "@/lib/cases";
-import { countObjectsInWork, getHotProperties } from "@/lib/properties";
+import { getHotProperties } from "@/lib/properties";
 import { getContacts, getSiteSettings } from "@/lib/settings";
 import { getPublicTestimonials } from "@/lib/testimonials";
-import { instagramLink, isPlaceholder, site, siteUrl } from "@/site.config";
+import { instagramLink, isFilled, site, siteUrl } from "@/site.config";
 
 export const revalidate = 60;
 
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [t, ta, settings, contacts, hot, cases, testimonials, objectsCount] = await Promise.all([
+  const [t, ta, settings, contacts, hot, cases, testimonials] = await Promise.all([
     getTranslations("home"),
     getTranslations("common.actions"),
     getSiteSettings(),
@@ -38,10 +38,9 @@ export default async function HomePage() {
     getHotProperties(3),
     getFeaturedCases(3),
     getPublicTestimonials(),
-    countObjectsInWork(),
   ]);
 
-  const name = site.agent.fullName.includes("[") ? site.agent.shortName : site.agent.fullName;
+  const name = site.agent.fullName;
 
   return (
     <>
@@ -51,7 +50,7 @@ export default async function HomePage() {
         values={{
           years: settings.stats.years ?? site.agent.yearsInMarket,
           volume: settings.stats.volume ?? site.agent.closedVolume,
-          objects: settings.stats.objects ?? objectsCount,
+          objects: settings.stats.objects ?? site.agent.objectsInBase,
           avgDeal: settings.stats.avgDeal ?? site.agent.avgDealDuration,
         }}
       />
@@ -118,7 +117,7 @@ export default async function HomePage() {
           url: siteUrl(),
           image: `${siteUrl()}/agent/avatar.jpg`,
           telephone: contacts.phone,
-          ...(isPlaceholder(contacts.email) ? {} : { email: contacts.email }),
+          ...(isFilled(contacts.email) ? { email: contacts.email } : {}),
           areaServed: { "@type": "City", name: site.agent.city },
           address: { "@type": "PostalAddress", addressLocality: site.agent.city, addressCountry: "KZ" },
           sameAs: [instagramLink(contacts.instagram)],

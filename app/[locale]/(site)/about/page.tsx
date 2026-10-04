@@ -19,14 +19,14 @@ const WORK_PHOTOS = [1, 2, 3, 4, 5, 6] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("about.meta");
-  const name = site.agent.fullName.includes("[") ? site.agent.shortName : site.agent.fullName;
+  const name = site.agent.fullName;
   return { title: t("title"), description: t("description", { name }), alternates: { canonical: "/about" } };
 }
 
 /** Полностью от первого лица, единственного числа. */
 export default async function AboutPage() {
   const [t, tc, testimonials, contacts] = await Promise.all([getTranslations("about"), getTranslations("common"), getPublicTestimonials(), getContacts()]);
-  const name = site.agent.fullName.includes("[") ? site.agent.shortName : site.agent.fullName;
+  const name = site.agent.fullName;
   const wa = whatsappLink(tc("whatsappPreset")).replace(/wa\.me\/\d+/, `wa.me/${contacts.whatsapp}`);
   // Кадры с объектов кладутся в public/agent/work/1..6.jpg; пока их нет — видимая заглушка
   const photos = WORK_PHOTOS.map((n) => ({ n, exists: existsSync(path.join(process.cwd(), "public", "agent", "work", `${n}.jpg`)) }));

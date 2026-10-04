@@ -60,7 +60,8 @@ export interface Contacts {
   whatsapp: string;
   telegram: string;
   instagram: string;
-  email: string;
+  /** Email необязателен: если его нет ни в настройках, ни в конфиге, строка не рендерится. */
+  email: string | undefined;
 }
 
 /** Контакты: настройки из админки поверх site.config.ts. */

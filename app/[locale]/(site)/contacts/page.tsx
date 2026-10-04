@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { AtSign, Camera, MessageCircle, Phone, Send } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { LeadFormDeferred } from "@/components/forms/LeadFormStatic";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { FillIn } from "@/components/ui/Placeholder";
 import { formatPhoneDisplay } from "@/lib/format";
 import { getContacts } from "@/lib/settings";
-import { instagramLink, isPlaceholder, phoneHref, site, telegramLink, whatsappLink } from "@/site.config";
+import { instagramLink, isFilled, phoneHref, site, telegramHandle, telegramLink, whatsappLink } from "@/site.config";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("contacts.meta");
-  const name = site.agent.fullName.includes("[") ? site.agent.shortName : site.agent.fullName;
-  return { title: t("title"), description: t("description", { name }), alternates: { canonical: "/contacts" } };
+  return { title: t("title"), description: t("description", { name: site.agent.fullName }), alternates: { canonical: "/contacts" } };
+}
+
+interface ContactRow {
+  key: string;
+  label: string;
+  value: ReactNode;
+  href?: string;
+  Icon: typeof Phone;
+  external?: boolean;
 }
 
 export default async function ContactsPage() {
@@ -21,26 +29,32 @@ export default async function ContactsPage() {
   const wa = whatsappLink(tc("whatsappPreset")).replace(/wa\.me\/\d+/, `wa.me/${contacts.whatsapp}`);
   const rowClass = "flex items-center gap-4 rounded-base border border-line bg-surface p-4 transition-[border-color] hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
-  const rows: Array<{ key: string; label: string; value: React.ReactNode; href?: string; Icon: typeof Phone; external?: boolean }> = [
+  // Telegram-приглашение сделано по номеру, публичного username нет: показываем номер,
+  // как в строке WhatsApp. Если в настройках укажут username — покажем @username.
+  const tgHandle = isFilled(contacts.telegram) ? telegramHandle(contacts.telegram) : null;
+
+  const rows: ContactRow[] = [
     { key: "phone", label: t("phone"), value: formatPhoneDisplay(contacts.phone), href: phoneHref(contacts.phone), Icon: Phone },
     { key: "whatsapp", label: t("whatsapp"), value: formatPhoneDisplay(`+${contacts.whatsapp}`), href: wa, Icon: MessageCircle, external: true },
-    {
+  ];
+
+  if (isFilled(contacts.telegram)) {
+    rows.push({
       key: "telegram",
       label: t("telegram"),
-      value: isPlaceholder(contacts.telegram) ? <FillIn value={contacts.telegram} /> : `@${contacts.telegram.replace(/^@/, "")}`,
-      href: isPlaceholder(contacts.telegram) ? undefined : telegramLink(contacts.telegram),
+      value: tgHandle ? `@${tgHandle}` : formatPhoneDisplay(contacts.phone),
+      href: telegramLink(contacts.telegram),
       Icon: Send,
       external: true,
-    },
-    { key: "instagram", label: t("instagram"), value: `@${contacts.instagram}`, href: instagramLink(contacts.instagram), Icon: Camera, external: true },
-    {
-      key: "email",
-      label: t("email"),
-      value: isPlaceholder(contacts.email) ? <FillIn value={contacts.email} /> : contacts.email,
-      href: isPlaceholder(contacts.email) ? undefined : `mailto:${contacts.email}`,
-      Icon: AtSign,
-    },
-  ];
+    });
+  }
+
+  rows.push({ key: "instagram", label: t("instagram"), value: `@${contacts.instagram}`, href: instagramLink(contacts.instagram), Icon: Camera, external: true });
+
+  // Email показываем, только если он задан: пустую строку и заглушку не рендерим.
+  if (isFilled(contacts.email)) {
+    rows.push({ key: "email", label: t("email"), value: contacts.email, href: `mailto:${contacts.email}`, Icon: AtSign });
+  }
 
   return (
     <>
@@ -79,12 +93,12 @@ export default async function ContactsPage() {
                 <dt className="w-24 shrink-0 text-ink-muted">{t("city")}</dt>
                 <dd>{site.agent.city}</dd>
               </div>
-              <div className="flex gap-3">
-                <dt className="w-24 shrink-0 text-ink-muted">{t("legal")}</dt>
-                <dd>
-                  <FillIn value={site.legal.entity} />
-                </dd>
-              </div>
+              {isFilled(site.legal.entity) ? (
+                <div className="flex gap-3">
+                  <dt className="w-24 shrink-0 text-ink-muted">{t("legal")}</dt>
+                  <dd>{site.legal.entity}</dd>
+                </div>
+              ) : null}
             </dl>
           </div>
 

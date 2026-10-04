@@ -22,8 +22,10 @@ export function Stats({ values }: { values: StatsValues }) {
     <section aria-label={t("aria")} className="border-b border-line">
       <dl className="container-site grid grid-cols-2 gap-x-6 gap-y-8 py-10 md:grid-cols-4 lg:py-12">
         {items.map((item) => (
-          <div key={item.label}>
-            <dd className="text-2xl font-semibold tabular md:text-3xl">
+          <div key={item.label} className="min-w-0">
+            {/* Значение всегда в одну строку: размер подбирается под ширину экрана,
+                чтобы длинные формулировки вроде «более 3 млрд ₸» не ломали сетку 2×2. */}
+            <dd className="whitespace-nowrap text-[clamp(1.0625rem,4.8vw,1.875rem)] font-semibold tabular">
               <FillIn value={item.value} className="text-sm font-medium" />
             </dd>
             <dt className="mt-1 text-sm text-ink-muted">{item.label}</dt>

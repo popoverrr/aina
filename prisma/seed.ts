@@ -1,5 +1,6 @@
 /**
  * Демо-данные для разработки: 8 объектов, 3 кейса, 3 отзыва. Все помечены isDemo: true
+ * Плюс реальные кейсы заказчика (realCases) — они остаются при --clean.
  * и явно подписаны «Демо» в заголовках — это НЕ реальные факты, их нужно заменить в админке.
  *
  *   npm run db:seed
@@ -240,6 +241,27 @@ const cases: DemoCase[] = [
   },
 ];
 
+/**
+ * Реальные данные заказчика. Живут рядом с демо, но не помечены isDemo и не удаляются
+ * ключом --clean: это настоящий кейс, а не образец для вёрстки.
+ */
+const realCases: Prisma.CaseCreateInput[] = [
+  {
+    slug: "terrakota",
+    title: "Коммерческое помещение в ЖК «Терракота»",
+    kind: "RETAIL",
+    dealType: "SALE",
+    amountLabel: "500 млн ₸",
+    durationLabel: "1,5 месяца",
+    task: "Продать коммерческое помещение в жилом комплексе.",
+    solution:
+      "Нашла объект и за пару дней договорилась с собственником напрямую. На четвёртый день покупатель внёс задаток. Дальше сопровождала сделку, пока он оформлял кредит.",
+    result: "Сделка на 500 млн ₸ закрыта за полтора месяца.",
+    isFeatured: true,
+    order: 0,
+  },
+];
+
 const testimonials: DemoTestimonial[] = [
   {
     isDemo: true,
@@ -291,10 +313,15 @@ async function main(): Promise<void> {
       const data = strip(item);
       await prisma.case.upsert({ where: { slug: data.slug }, create: data, update: data });
     }
+    for (const data of realCases) {
+      await prisma.case.upsert({ where: { slug: data.slug }, create: data, update: data });
+    }
     await prisma.testimonial.deleteMany({ where: { author: { startsWith: DEMO_AUTHOR_PREFIX } } });
     await prisma.testimonial.createMany({ data: testimonials.map(strip) });
 
-    console.log(`Демо-данные загружены: ${properties.length} объектов, ${cases.length} кейсов, ${testimonials.length} отзыва.`);
+    console.log(
+      `Загружено: ${properties.length} демо-объектов, ${cases.length} демо-кейсов, ${realCases.length} реальный кейс, ${testimonials.length} демо-отзыва.`,
+    );
   } finally {
     await prisma.$disconnect();
   }

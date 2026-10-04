@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { HighlightPlaceholders } from "@/components/ui/Placeholder";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatPhoneDisplay } from "@/lib/format";
 import { getContacts } from "@/lib/settings";
 import { site } from "@/site.config";
 
 export const revalidate = 3600;
 
 /** Дата актуальной редакции политики — менять при изменении текста. */
-const POLICY_UPDATED = "2026-09-15";
+const POLICY_UPDATED = "2026-10-04";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("privacy.meta");
@@ -34,7 +34,7 @@ export default async function PrivacyPage() {
                   {t(`sections.${k}.title`)}
                 </h2>
                 <p className="mt-2 text-ink">
-                  <HighlightPlaceholders text={t(`sections.${k}.text`, { domain: site.site.domain, entity: site.legal.entity, email: contacts.email })} />
+                  <HighlightPlaceholders text={t(`sections.${k}.text`, { domain: site.site.domain, operator: site.legal.operator, phone: formatPhoneDisplay(contacts.phone) })} />
                 </p>
               </section>
             ))}

@@ -6,7 +6,6 @@ import { ConsentText } from "@/components/forms/ConsentText";
 import { OwnerForm } from "@/components/forms/OwnerForm";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ButtonLink } from "@/components/ui/Button";
-import { FillInText } from "@/components/ui/Placeholder";
 import { Section } from "@/components/ui/Section";
 import { getRentCases } from "@/lib/cases";
 
@@ -51,25 +50,15 @@ export default async function OwnersPage() {
       </Section>
 
       <Section aria-labelledby="scope-title">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <h2 id="scope-title">{t("scope.title")}</h2>
-            <ul className="mt-6 space-y-3">
-              {(["1", "2", "3", "4", "5", "6"] as const).map((k) => (
-                <li key={k} className="flex gap-3">
-                  <Check className="mt-1 size-4 shrink-0 text-success" aria-hidden="true" />
-                  <span>{t(`scope.items.${k}`)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-base border border-line bg-surface-2 p-6 lg:p-8">
-            <h2 className="text-xl">{t("commission.title")}</h2>
-            <div className="mt-3">
-              <FillInText value={t("commission.text")} />
-            </div>
-          </div>
-        </div>
+        <h2 id="scope-title">{t("scope.title")}</h2>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:gap-x-12">
+          {(["1", "2", "3", "4", "5", "6"] as const).map((k) => (
+            <li key={k} className="flex gap-3">
+              <Check className="mt-1 size-4 shrink-0 text-success" aria-hidden="true" />
+              <span>{t(`scope.items.${k}`)}</span>
+            </li>
+          ))}
+        </ul>
       </Section>
 
       <Section tone="muted" aria-labelledby="rent-cases-title">

@@ -324,13 +324,6 @@ export const getFullPropertyBySlug = cachedQuery(
   null,
 );
 
-export const countObjectsInWork = cachedQuery(
-  async (): Promise<number> => prisma.property.count({ where: { status: { in: PUBLIC_STATUSES } } }),
-  ["properties-count"],
-  [TAGS.properties],
-  0,
-);
-
 export const getPublicPropertySlugs = cachedQuery(
   async (): Promise<Array<{ slug: string; updatedAt: string }>> => {
     const rows = await prisma.property.findMany({

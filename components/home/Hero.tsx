@@ -9,7 +9,7 @@ import { site } from "@/site.config";
  */
 export function Hero({ title, subtitle }: { title?: string; subtitle?: string }) {
   const t = useTranslations("home.hero");
-  const name = site.agent.fullName.includes("[") ? site.agent.shortName : site.agent.fullName;
+  const name = site.agent.fullName;
 
   return (
     <section className="border-b border-line bg-surface-2">

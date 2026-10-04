@@ -45,10 +45,7 @@ export function BestLocations({ text }: { text?: string }) {
             <text x="240" y="190" textAnchor="middle" fontSize="18" fontWeight="600" fill="var(--color-accent-ink)">
               {t("mapLabel")}
             </text>
-            {/* подписи */}
-            <text x="240" y="332" textAnchor="middle" fontSize="12" fill="var(--color-ink-muted)">
-              пр. Абая
-            </text>
+            {/* подписи: только ориентация, без улиц — точные границы не согласованы */}
             <text x="240" y="50" textAnchor="middle" fontSize="12" fill="var(--color-ink-muted)">
               север · центр города
             </text>
