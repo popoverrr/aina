@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     ".pgdata/**",
     ".tmp/**",
     "out-preview/**",
+    "dist/**",
   ]),
 ]);
 

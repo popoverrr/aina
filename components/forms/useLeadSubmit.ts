@@ -25,14 +25,24 @@ export function useLeadSubmit<T extends FieldValues>(setValue: UseFormSetValue<T
   const submit = (values: unknown) => {
     setFormError(null);
     startTransition(async () => {
-      const result: LeadActionResult | undefined = await submitLead(values, locale);
-      if (!result || result.ok) return;
-      if (result.fieldErrors) {
-        for (const [field, key] of Object.entries(result.fieldErrors)) {
-          setError(field as Path<T>, { type: "server", message: key });
+      try {
+        const result: LeadActionResult | undefined = await submitLead(values, locale);
+        if (!result || result.ok) return;
+        if (result.fieldErrors) {
+          for (const [field, key] of Object.entries(result.fieldErrors)) {
+            setError(field as Path<T>, { type: "server", message: key });
+          }
         }
+        setFormError(result.formError ?? (result.fieldErrors ? null : "generic"));
+      } catch (error) {
+        // Переходы и 404 Next бросает своими служебными ошибками — их пропускаем дальше.
+        const digest = typeof error === "object" && error !== null && "digest" in error ? String((error as { digest?: unknown }).digest) : "";
+        if (digest.startsWith("NEXT_REDIRECT") || digest.startsWith("NEXT_NOT_FOUND")) throw error;
+        // Сеть недоступна или сервер не принял действие (например, сайт раздаётся статикой):
+        // показываем штатную ошибку со ссылкой на WhatsApp вместо молчаливого сбоя.
+        console.error("[lead] не удалось отправить заявку:", error);
+        setFormError("generic");
       }
-      setFormError(result.formError ?? (result.fieldErrors ? null : "generic"));
     });
   };
 

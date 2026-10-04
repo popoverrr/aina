@@ -53,3 +53,10 @@ next-env.d.ts
 
 # preview snapshot for GitHub Pages
 /out-preview/
+
+# deploy credentials (ftp.env with password stays out of git)
+deploy/*
+!deploy/ftp.env.example
+
+# production static build (uploaded by scripts/deploy-ftp.mjs)
+/dist/
